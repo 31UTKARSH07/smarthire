@@ -6,8 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Entity
+@Table(name = "user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,11 +19,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String fullName;
+    private String firstName;
+    private String lastName;
+
     private String email;
     private String password;
     private String role;
-    private String skills;
+    @ElementCollection
+    private List<String> skills;
+
     private String bio;
-    private String resumeUrl;
+    private String location;
+    private String education;
+    private String experience;
 }
