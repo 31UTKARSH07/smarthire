@@ -37,3 +37,9 @@ public class UserController {
         return ResponseEntity.ok("User has been deleted");
     }
 }
+
+/*
+ * The @Component annotation tells
+ * Spring to create this class as a "bean,"
+ * so you can @Autowired (inject) it into other classes
+ */
