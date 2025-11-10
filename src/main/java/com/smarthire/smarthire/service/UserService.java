@@ -6,7 +6,6 @@ import com.smarthire.smarthire.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.List;
 
@@ -15,12 +14,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
-    private final NativeWebRequest nativeWebRequest;
 
-    public UserService(UserRepository userRepository, PasswordEncoder encoder, NativeWebRequest nativeWebRequest) {
+    public UserService(UserRepository userRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.encoder = encoder;
-        this.nativeWebRequest = nativeWebRequest;
     }
     public User register(SignupRequest req){
         if(userRepository.existsByEmail(req.getEmail())){
@@ -44,7 +41,6 @@ public class UserService {
     public User updateUser(Long id,User updateUser){
         User existingUser = userRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("User not found with id"+id));
-
         existingUser.setFirstName(updateUser.getFirstName());
         existingUser.setLastName(updateUser.getLastName());
         existingUser.setEmail(updateUser.getEmail());

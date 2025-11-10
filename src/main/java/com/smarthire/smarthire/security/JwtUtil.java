@@ -1,34 +1,37 @@
 package com.smarthire.smarthire.security;
 
-
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 
-// I am creating this class to manage my token
 @Component
 public class JwtUtil {
-    @Value("${jwt.secret}")
+    @Value("${JWT_SECRET}")
     private String jwtSecret;
 
-    @Value("${jwt.expirationMs}")
+    @Value("${jwt.expirationMs:3600000}")
     private long jwtExpirationInMs;
 
-    private Key getSingingKey(){
+    @PostConstruct
+    public void init() {
+        if (jwtSecret == null || jwtSecret.isEmpty()) {
+            throw new IllegalStateException("JWT_SECRET is not configured!");
+        }
+        System.out.println("✓ JWT_SECRET loaded successfully, length: " + jwtSecret.length());
+    }
+
+    private Key getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
-    /*It converts your plain-text jwtSecret string
-     (which is just text) into a secure, cryptographic Key object.
-     The JWT library needs this special Key object to perform the digital signature,
-     it can't just use the string.*/
 
-    public String generateToken(String userName){
+    public String generateToken(String userName) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + jwtExpirationInMs);
 
@@ -36,31 +39,31 @@ public class JwtUtil {
                 .setSubject(userName)
                 .setIssuedAt(now)
                 .setExpiration(expiry)
-                .signWith(getSingingKey(), SignatureAlgorithm.HS256)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public boolean validateToken(String token , String userName){
+    public boolean validateToken(String token, String userName) {
         try {
             String tokenUser = getUserNameFromToken(token);
             return (tokenUser.equals(userName) && !isTokenExpired(token));
-        }catch (JwtException | IllegalArgumentException ex){
+        } catch (JwtException | IllegalArgumentException ex) {
             return false;
         }
     }
 
     private String getUserNameFromToken(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSingingKey())
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
 
-    private boolean isTokenExpired(String token){
+    private boolean isTokenExpired(String token) {
         Date expiration = Jwts.parserBuilder()
-                .setSigningKey(getSingingKey())
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
@@ -68,6 +71,4 @@ public class JwtUtil {
 
         return expiration.before(new Date());
     }
-
-
 }
