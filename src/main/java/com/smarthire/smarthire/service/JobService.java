@@ -18,12 +18,10 @@ public class JobService {
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
     }
-
     public Job createJob(Job job){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User recruiter = userRepository.findByEmail(email)
                 .orElseThrow(()->new RuntimeException("Recruiter not found"));
-
         job.setRecruiter(recruiter);
         return jobRepository.save(job);
     }
@@ -34,14 +32,12 @@ public class JobService {
         return jobRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("Job not found"));
     }
-
     public List<Job>getJobByRecruiter(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User recruiter = userRepository.findByEmail(email)
                 .orElseThrow(()->new RuntimeException("Recruiter not found"));
         return jobRepository.findByRecruiter(recruiter);
     }
-
     public void delete(Long id){
         jobRepository.deleteById(id);
     }
