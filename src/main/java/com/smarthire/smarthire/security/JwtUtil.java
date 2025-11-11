@@ -26,11 +26,9 @@ public class JwtUtil {
         }
         System.out.println("✓ JWT_SECRET loaded successfully, length: " + jwtSecret.length());
     }
-
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
-
     public String generateToken(String userName) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + jwtExpirationInMs);
@@ -42,7 +40,6 @@ public class JwtUtil {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
-
     public boolean validateToken(String token, String userName) {
         try {
             String tokenUser = getUserNameFromToken(token);
@@ -51,7 +48,6 @@ public class JwtUtil {
             return false;
         }
     }
-
     private String getUserNameFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -60,7 +56,6 @@ public class JwtUtil {
                 .getBody()
                 .getSubject();
     }
-
     private boolean isTokenExpired(String token) {
         Date expiration = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
