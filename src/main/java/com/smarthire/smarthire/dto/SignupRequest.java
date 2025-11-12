@@ -1,5 +1,6 @@
 package com.smarthire.smarthire.dto;
 
+import com.smarthire.smarthire.model.Role;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class SignupRequest {
     private String password;
     @NotNull
     @NotEmpty
-    private String role;//student or recruiter
+    private Role role;//student or recruiter
+
 }
