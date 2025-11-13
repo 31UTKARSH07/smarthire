@@ -2,10 +2,11 @@ package com.smarthire.smarthire.repository;
 
 import com.smarthire.smarthire.model.Job;
 import com.smarthire.smarthire.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
 
 import java.util.List;
 
-public interface JobRepository extends JpaRepository<Job,Long> {
+public interface JobRepository extends MongoRepository<Job,Long> {
     List<Job> findByRecruiter(User recruiter);
 }

@@ -19,6 +19,7 @@ public class UserService {
         this.userRepository = userRepository;
         this.encoder = encoder;
     }
+
     public User register(SignupRequest req){
         if(userRepository.existsByEmail(req.getEmail())){
             throw new RuntimeException("User already registerd with this email");
@@ -32,13 +33,16 @@ public class UserService {
                 .build();
         return userRepository.save(u);
     }
+
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
-    public User getUserById(Long id){
+
+    public User getUserById(String id){
         return userRepository.findById(id).orElse(null);
     }
-    public User updateUser(Long id,User updateUser){
+
+    public User updateUser(String id,User updateUser){
         User existingUser = userRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("User not found with id"+id));
         existingUser.setFirstName(updateUser.getFirstName());
@@ -51,7 +55,8 @@ public class UserService {
         }
         return userRepository.save(existingUser);
     }
-    public void deleteUserById(Long id){
+
+    public void deleteUserById(String id){
          userRepository.deleteById(id);
     }
 

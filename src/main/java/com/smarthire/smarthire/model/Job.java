@@ -1,23 +1,25 @@
 package com.smarthire.smarthire.model;
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
+@Document(collation = "jobs")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Job {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String title;
     private String description;
@@ -25,17 +27,12 @@ public class Job {
     private String jobType;
     private String salaryRange;
 
-    @ElementCollection
+
     private List<String>skillRequired;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recruiter_id")
+    @DBRef
     private User recruiter;
 
-    @PrePersist
-    public void onCreate(){
-        this.createdAt = LocalDateTime.now();
-    }
 }

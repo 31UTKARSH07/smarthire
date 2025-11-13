@@ -1,25 +1,23 @@
 package com.smarthire.smarthire.model;
 
-
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 
-@Entity
-@Table(name = "user")
+@Document(collection = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String firstName;
     private String lastName;
@@ -27,10 +25,8 @@ public class User {
     private String email;
     private String password;
 
-    @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ElementCollection
     private List<String> skills;
 
     private String bio;

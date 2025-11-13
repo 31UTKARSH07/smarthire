@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @Service
 public class RefreshTokenService {
+
     private Long refreshTokenDurationMs;
 
     private final RefreshTokenRepository refreshTokenRepository;
@@ -23,16 +24,14 @@ public class RefreshTokenService {
         this.userRepository = userRepository;
     }
 
-    public RefreshToken createRefreshToken(Long userId){
+    public RefreshToken createRefreshToken(String userId){
         refreshTokenRepository.deleteByUser(userRepository.findById(userId).get());
-
-
         String token = UUID.randomUUID().toString();
         RefreshToken refreshToken = RefreshToken.builder()
                 .user(userRepository.findById(userId).get())
                 .token(token)
                 .expiryDate(Instant.now().plus(7, ChronoUnit.DAYS))
-                .revoke(false)
+                .revoked(false)
                 .build();
 
         return refreshTokenRepository.save(refreshToken);
@@ -43,7 +42,7 @@ public class RefreshTokenService {
             refreshTokenRepository.delete(token);
             throw new RuntimeException("Refresh token expired. Please Login again.");
         }
-        if(token.isRevoke()){
+        if(token.isRevoked()){
             throw new RuntimeException("Refresh token already used. Please login again.");
         }
         return token;
@@ -53,7 +52,7 @@ public class RefreshTokenService {
     }
 
     public RefreshToken rotateToken(RefreshToken oldToken){
-        oldToken.setRevoke(true);
+        oldToken.setRevoked(true);
         refreshTokenRepository.save(oldToken);
         return createRefreshToken(oldToken.getUser().getId());
     }

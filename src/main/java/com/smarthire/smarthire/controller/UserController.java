@@ -22,15 +22,15 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUsersById(@PathVariable Long id){
+    public ResponseEntity<User> getUsersById(@PathVariable String id){
         return ResponseEntity.ok(userService.getUserById(id));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updateUser){
+    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User updateUser){
         return ResponseEntity.ok(userService.updateUser(id,updateUser));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String>deleteUser(@PathVariable Long id){
+    public ResponseEntity<String>deleteUser(@PathVariable String id){
         userService.deleteUserById(id);
         return ResponseEntity.ok("User has been deleted");
     }
