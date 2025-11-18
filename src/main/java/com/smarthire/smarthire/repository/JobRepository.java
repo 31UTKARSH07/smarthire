@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface JobRepository extends MongoRepository<Job,Long> {
-    List<Job> findByRecruiter(User recruiter);
+public interface JobRepository extends MongoRepository<Job,String> {
+    List<Job> findByRecruiterId(String recruiterId);
+    List<Job> findByTitleContainingIgnoreCase(String title);
 }

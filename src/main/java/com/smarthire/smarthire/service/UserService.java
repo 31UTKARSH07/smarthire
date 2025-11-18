@@ -22,7 +22,7 @@ public class UserService {
 
     public User register(SignupRequest req){
         if(userRepository.existsByEmail(req.getEmail())){
-            throw new RuntimeException("User already registerd with this email");
+            throw new RuntimeException("User already registered with this email");
         }
         User u = User.builder()
                 .firstName(req.getFirstName())
