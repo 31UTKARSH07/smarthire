@@ -4,6 +4,7 @@ import com.smarthire.smarthire.security.CustomUserDetailsService;
 import com.smarthire.smarthire.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,8 +41,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())  // disable CSRF for REST APIs
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/jobs/**").authenticated()
-                        .anyRequest().permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/jobs").hasRole("RECRUITER")
+                        .requestMatchers("/api/jobs/recruiter").hasRole("RECRUITER")
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .userDetailsService(userDetailsService);

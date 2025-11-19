@@ -18,7 +18,7 @@ public class JobResponse {
     private String location;
     private String jobType;
     private String salaryRange;
-    private List<String> salaryRequired;
+    //private List<String> salaryRequired;
     private List<String> skillsRequired;
     private String recruiterId;
     private String recruiterEmail;

@@ -26,7 +26,7 @@ public class Job {
     private String location;
     private String jobType;
     private String salaryRange;
-    private List<String>skillRequired;
+    private List<String>skillsRequired;
 
     private String recruiterId;
     private String recruiterEmail;

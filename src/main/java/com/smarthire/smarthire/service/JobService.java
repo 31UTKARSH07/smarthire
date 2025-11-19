@@ -7,11 +7,14 @@ import com.smarthire.smarthire.model.Role;
 import com.smarthire.smarthire.model.User;
 import com.smarthire.smarthire.repository.JobRepository;
 import com.smarthire.smarthire.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +38,7 @@ public class JobService {
                 .location(req.getLocation())
                 .jobType(req.getJobType())
                 .salaryRange(req.getSalaryRange())
-                .skillRequired(req.getSkillsRequired())
+                .skillsRequired(req.getSkillsRequired())
                 .recruiterId(recruiter.getId())
                 .recruiterEmail(recruiter.getEmail())
                 .createdAt(LocalDateTime.now())
@@ -60,7 +63,7 @@ public class JobService {
                 .location(job.getLocation())
                 .jobType(job.getJobType())
                 .salaryRange(job.getSalaryRange())
-                .skillsRequired(job.getSkillRequired())
+                .skillsRequired(job.getSkillsRequired())
                 .recruiterId(job.getRecruiterId())
                 .recruiterEmail(job.getRecruiterEmail())
                 .createdAt(job.getCreatedAt())
@@ -80,17 +83,39 @@ public class JobService {
                         .build())
                 .collect(Collectors.toList());
     }
-    public JobResponse getJobById(String id){
 
+    public JobResponse getJobById(String id){
+        Job optionalJob = jobRepository.findById(id)
+                .orElseThrow(()->new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,"Job not found"
+                ));
+        return mapToResponse(optionalJob);
     }
-    public List<Job>getJobByRecruiter(){
+    public List<JobResponse>getJobByRecruiter(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User recruiter = userRepository.findByEmail(email)
-                .orElseThrow(()->new RuntimeException("Recruiter not found"));
-        return jobRepository.findByRecruiterId(recruiter.getId());
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Recruiter Not Found!!"));
+
+        if(recruiter.getRole() != Role.RECRUITER){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only recruiters can view their jobs");
+        }
+        List <Job> jobs = jobRepository.findByRecruiterId(recruiter.getId());
+        return jobs.stream()
+                .map(this::mapToResponse)
+                .toList();
     }
-    public void delete(String id){
-        jobRepository.deleteById(id);
+    public void delete(String jobId,User user){
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(()->new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,"Job not found"
+                ));
+        if(!job.getRecruiterId().equals(user.getId())){
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "You cannot delete this job"
+            );
+        }
+        jobRepository.delete(job);
     }
 
 
