@@ -10,7 +10,7 @@ import com.smarthire.smarthire.repository.ApplicationRepository;
 import com.smarthire.smarthire.repository.JobRepository;
 import com.smarthire.smarthire.repository.UserRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -53,26 +53,54 @@ public class ApplicationService {
     }
     public List<ApplicationResponse> getApplicationsForJob(String jobId,User recruiter){
         Job job = jobRepository.findById(jobId)
-                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"job not found"));
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Job not found"));
 
         if(!job.getRecruiterId().equals(recruiter.getId())){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"You cannot view applicants for this job");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"You do not own this job");
         }
+        List<Application>apps = applicationRepository.findByJobId(jobId);
 
-        List<Application>applications = applicationRepository.findByJobId(jobId);
-
-        return applications.stream()
+        return apps.stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
     public ApplicationResponse updateStatus(String applicationId, ApplicationStatus status , User recruiter){
+        Application app = applicationRepository.findById(applicationId)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Application not found!"));
 
+
+        Job job = jobRepository.findById(app.getJobId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Job not found!"));
+
+        if(!job.getRecruiterId().equals(recruiter.getId())){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"You are not allowed to update this application");
+        }
+        app.setStatus(status);
+        app.setUpdatedAt(LocalDateTime.now());
+
+        Application updated = applicationRepository.save(app);
+        return mapToResponse(updated);
     }
-    public void withdrawApplication(String applicationId,User student){
+    public void withdrawApplication(String applicationId, User student){
+        Application app = applicationRepository.findById(applicationId)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"application not found"));
 
+        if(!app.getStudentId().equals(student.getId())){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"You cannot withdraw someone else's application");
+        }
+        applicationRepository.delete(app);
     }
     private ApplicationResponse mapToResponse(Application app){
         return ApplicationResponse.builder()
-
+                .id(app.getJobId())
+                .jobTitle(app.getJobTitle())
+                .studentId(app.getStudentId())
+                .studentEmail(app.getStudentEmail())
+                .resumeUrl(app.getResumeUrl())
+                .coverLetter(app.getCoverLetter())
+                .status(app.getStatus())
+                .appliedAt(app.getAppliedAt())
+                .updatedAt(app.getUpdatedAt())
+                .build();
     }
 }
