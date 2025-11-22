@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 
 @RestController
@@ -63,6 +62,21 @@ public class JobController {
     @GetMapping("/recruiter")
     public ResponseEntity<List<JobResponse>>getJobByRecruiter(){
         return ResponseEntity.ok(jobService.getJobByRecruiter());
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<JobResponse>updateJob(@PathVariable String id,@RequestBody JobRequest req){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User recruiter = userService.findByEmail(email);
+
+        requireRecruiterRole(recruiter);
+        JobResponse updatedJob = null;
+        try {
+            updatedJob = jobService.updateJob(id,req,recruiter);
+        } catch (java.nio.file.AccessDeniedException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.ok(updatedJob);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?>deleteJob(@PathVariable String id){

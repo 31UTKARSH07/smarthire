@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -104,6 +105,30 @@ public class JobService {
                 .map(this::mapToResponse)
                 .toList();
     }
+    public JobResponse updateJob(String id,JobRequest req ,User recruiter) throws AccessDeniedException {
+        Job job = jobRepository.findById(id)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Job not found"));
+
+        if(!job.getRecruiterEmail().equals(recruiter.getEmail())){
+            throw new AccessDeniedException("You can only update jobs you created");
+        }
+
+        if(req.getTitle()!=null) job.setTitle(req.getTitle());
+        if(req.getDescription()!=null)job.setDescription(req.getDescription());
+        if(req.getLocation()!=null)job.setLocation(req.getLocation());
+        if(req.getJobType()!=null)job.setJobType(req.getJobType());
+        if(req.getSalaryRange()!=null)job.setSalaryRange(req.getSalaryRange());
+        if(req.getSkillsRequired()!=null)job.setSkillsRequired(req.getSkillsRequired());
+
+
+        job.setUpdatedAt(LocalDateTime.now());
+
+        Job updated = jobRepository.save(job);
+
+        return mapToResponse(updated);
+    }
+
+
     public void delete(String jobId,User user){
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(()->new ResponseStatusException(
@@ -117,6 +142,4 @@ public class JobService {
         }
         jobRepository.delete(job);
     }
-
-
 }
