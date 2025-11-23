@@ -90,6 +90,13 @@ public class ApplicationService {
         }
         applicationRepository.delete(app);
     }
+    public List<ApplicationResponse>getMyApplications(String studentId){
+        List<Application>apps = applicationRepository.findByStudentId(studentId);
+
+        return apps.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
     private ApplicationResponse mapToResponse(Application app){
         return ApplicationResponse.builder()
                 .id(app.getJobId())
