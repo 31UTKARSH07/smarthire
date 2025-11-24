@@ -2,11 +2,9 @@ package com.smarthire.smarthire.controller;
 
 import com.smarthire.smarthire.dto.ApplicationRequest;
 import com.smarthire.smarthire.dto.ApplicationResponse;
-import com.smarthire.smarthire.model.Application;
 import com.smarthire.smarthire.model.ApplicationStatus;
 import com.smarthire.smarthire.model.Role;
 import com.smarthire.smarthire.model.User;
-import com.smarthire.smarthire.repository.ApplicationRepository;
 import com.smarthire.smarthire.service.ApplicationService;
 import com.smarthire.smarthire.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -25,12 +23,10 @@ import static com.smarthire.smarthire.model.Role.STUDENT;
 public class ApplicationController {
     private final ApplicationService applicationService;
     private final UserService userService;
-    private final ApplicationRepository applicationRepository;
 
-    public ApplicationController(ApplicationService applicationService, UserService userService, ApplicationRepository applicationRepository) {
+    public ApplicationController(ApplicationService applicationService, UserService userService) {
         this.applicationService = applicationService;
         this.userService = userService;
-        this.applicationRepository = applicationRepository;
     }
     @PostMapping("/apply")
     public ResponseEntity<ApplicationResponse>apply(@RequestBody ApplicationRequest req){
