@@ -8,6 +8,7 @@ import com.smarthire.smarthire.model.User;
 import com.smarthire.smarthire.repository.ProfileRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Service
 public class ProfileService {
     private final UserService userService;
     private final ProfileRepository profileRepository;
@@ -49,7 +51,7 @@ public class ProfileService {
         return mapToResponse(profile);
     }
 
-    private ProfileResponse updateProfile(@PathVariable ProfileUpdateRequest req){
+    public ProfileResponse updateProfile(ProfileUpdateRequest req){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByEmail(email);
 

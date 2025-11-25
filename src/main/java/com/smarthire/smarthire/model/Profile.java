@@ -21,7 +21,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Profile {
-
     @Id
     private String id;
     private String userId;
