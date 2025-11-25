@@ -8,10 +8,7 @@ import com.smarthire.smarthire.service.ProfileService;
 import com.smarthire.smarthire.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/profile")
@@ -25,14 +22,11 @@ public class ProfileController {
         this.userService = userService;
     }
     @GetMapping("/me")
-    public ResponseEntity<ProfileResponse> getMyProfile(){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        //User user = userService.findByEmail(email);
-
-        ProfileResponse response = profileService.getMyProfile();
-        return ResponseEntity.ok(response);
+    public ResponseEntity<ProfileResponse> getMyProfile() {
+        return ResponseEntity.ok(profileService.getMyProfile());
     }
 
+    @PutMapping("/update")
     public ResponseEntity<ProfileResponse>updateProfile(@RequestBody ProfileUpdateRequest req){
         ProfileResponse updated = profileService.updateProfile(req);
         return ResponseEntity.ok(updated);
