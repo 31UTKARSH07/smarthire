@@ -84,7 +84,6 @@ public class ApplicationController {
         User student = userService.findByEmail(email);
         if(student.getRole() != STUDENT){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only students can withdraw applications");
-
         }
         applicationService.withdrawApplication(applicationId,student);
         return ResponseEntity.ok("Application withdrawn successfully");
