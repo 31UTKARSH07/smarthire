@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Resume - {{NAME}}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px 40px;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .header .headline {
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .contact-info {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        .contact-info span {
+            margin-right: 20px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .summary {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #34495e;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .experience-item,
+        .education-item,
+        .project-item {
+            margin-bottom: 25px;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 5px;
+        }
+
+        .item-title {
+            font-size: 17px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .item-date {
+            font-size: 13px;
+            color: #95a5a6;
+        }
+
+        .item-subtitle {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+
+        .item-description {
+            font-size: 14px;
+            color: #34495e;
+            line-height: 1.7;
+        }
+
+        .item-description ul {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+
+        .item-description li {
+            margin-bottom: 4px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ecf0f1;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>{{NAME}}</h1>
+        <div class="headline">{{HEADLINE}}</div>
+        <div class="contact-info">
+            <span>{{EMAIL}}</span>
+            <span>{{PHONE}}</span>
+            <span>{{LOCATION}}</span>
+        </div>
+    </div>
+
+    <hr/>
+
+    <!-- Summary -->
+    <div class="section">
+        <h2 class="section-title">Summary</h2>
+        <p class="summary">{{SUMMARY}}</p>
+    </div>
+
+    <!-- Skills -->
+    <div class="section">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-list">
+            {{SKILLS}}
+        </div>
+    </div>
+
+    <!-- Experience -->
+    <div class="section">
+        <h2 class="section-title">Experience</h2>
+        {{EXPERIENCE}}
+    </div>
+
+    <!-- Education -->
+    <div class="section">
+        <h2 class="section-title">Education</h2>
+        {{EDUCATION}}
+    </div>
+
+    <!-- Projects -->
+    <div class="section">
+        <h2 class="section-title">Projects</h2>
+        {{PROJECTS}}
+    </div>
+
+    <!-- Social Links -->
+    <div class="section">
+        <h2 class="section-title">Links</h2>
+        <div class="social-links">
+            {{SOCIAL_LINKS}}
+        </div>
+    </div>
+</div>
+</body>
+</html>

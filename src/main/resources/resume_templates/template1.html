@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Resume - {{NAME}}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #2563eb;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            color: #1e40af;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header .headline {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        .contact-info span {
+            display: inline-block;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            color: #1e40af;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #4b5563;
+            text-align: justify;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .experience-item,
+        .education-item,
+        .project-item {
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 3px solid #93c5fd;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .item-title {
+            font-size: 18px;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .item-date {
+            font-size: 14px;
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .item-subtitle {
+            font-size: 15px;
+            color: #4b5563;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .item-description {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.7;
+        }
+
+        .item-description ul {
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+
+        .item-description li {
+            margin-bottom: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .social-link:hover {
+            text-decoration: underline;
+        }
+
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                max-width: 100%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>{{NAME}}</h1>
+        <div class="headline">{{HEADLINE}}</div>
+        <div class="contact-info">
+            <span>📧 {{EMAIL}}</span>
+            <span>📱 {{PHONE}}</span>
+            <span>📍 {{LOCATION}}</span>
+        </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="section">
+        <h2 class="section-title">Professional Summary</h2>
+        <p class="summary">{{SUMMARY}}</p>
+    </div>
+
+    <!-- Skills -->
+    <div class="section">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-list">
+            {{SKILLS}}
+        </div>
+    </div>
+
+    <!-- Experience -->
+    <div class="section">
+        <h2 class="section-title">Work Experience</h2>
+        {{EXPERIENCE}}
+    </div>
+
+    <!-- Education -->
+    <div class="section">
+        <h2 class="section-title">Education</h2>
+        {{EDUCATION}}
+    </div>
+
+    <!-- Projects -->
+    <div class="section">
+        <h2 class="section-title">Projects</h2>
+        {{PROJECTS}}
+    </div>
+
+    <!-- Social Links -->
+    <div class="section">
+        <h2 class="section-title">Connect</h2>
+        <div class="social-links">
+            {{SOCIAL_LINKS}}
+        </div>
+    </div>
+</div>
+</body>
+</html>
