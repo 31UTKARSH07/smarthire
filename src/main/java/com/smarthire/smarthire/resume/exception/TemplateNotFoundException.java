@@ -1,4 +1,4 @@
-package com.smarthire.smarthire.resume;
+package com.smarthire.smarthire.resume.exception;
 
 public class TemplateNotFoundException extends RuntimeException {
     public TemplateNotFoundException(String templateName){
