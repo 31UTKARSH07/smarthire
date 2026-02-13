@@ -1,13 +1,15 @@
 package com.smarthire.smarthire.resume.services;
 
+import com.smarthire.smarthire.resume.dto.ExperienceDTO;
 import com.smarthire.smarthire.resume.dto.ResumeData;
 import com.smarthire.smarthire.resume.exception.TemplateNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
-
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -64,13 +66,57 @@ public class TemplateRenderer {
 
         return result;
     }
+
+    private String renderSkills(List<String> skills) {
+        if(skills == null || skills.isEmpty()){
+            return "<span class='skill-tag'>No skills listed</span>";
+        }
+        return skills.stream()
+                .map(skill -> "<span class='skill-tag'>"+escapeHTML(skill)+"</span")
+                .collect(Collectors.joining("\n"));
+    }
+
     private String replace(String template , String placeholder , String value){
         if(value == null){
             value = "";
         }
         return template.replace("{{"+placeholder+"}}",value);
-
-
     }
+
+    private String renderExperience(List<ExperienceDTO>experiences){
+        if(experiences == null || experiences.isEmpty()){
+            return "<p>No experience listed</p>";
+        }
+        /* we can also return in this way
+        * StringBuilder sb = new StringBuilder();
+        * for (Experience exp : experiences) {
+    sb.append(renderExperienceItem(exp)).append("\n");
+}
+return sb.toString();
+        * */
+        return experiences.stream()
+                .map(this::renderExperienceItem)
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String renderExperienceItem(ExperienceDTO exp){
+        StringBuilder html = new StringBuilder();
+        html.append("<div class='experience-item'>");
+    }
+
+
+
+
+    private String escapeHTML(String text){
+        if(text == null){
+            return "";
+        }
+        return text.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#x27;");
+    }
+
 
 }
