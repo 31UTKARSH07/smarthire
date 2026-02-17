@@ -12,7 +12,12 @@ public class DateParser {
 
         String end = duration.split("-")[1].trim();
         return formatDate(end);
+    }
+    public String extractProjectStartDate(String duration) {
+        if (duration == null || !duration.contains("-")) return null;
 
+        String start = duration.split("-")[0].trim();
+        return formatDate(start);
     }
 
     public String formatDate(String dateStr){
